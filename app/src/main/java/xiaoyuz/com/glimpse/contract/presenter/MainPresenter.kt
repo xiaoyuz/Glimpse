@@ -1,0 +1,28 @@
+package xiaoyuz.com.glimpse.contract.presenter
+
+import rx.android.schedulers.AndroidSchedulers
+import rx.schedulers.Schedulers
+import xiaoyuz.com.glimpse.contract.MainContract
+import xiaoyuz.com.glimpse.db.source.DataSourceManager
+
+class MainPresenter(val dataSourceManager: DataSourceManager,
+                    val mainView: MainContract.View) : MainContract.Presenter {
+
+    init {
+        mainView.presenter = this
+    }
+
+    override fun start() {
+        loadFeeds("")
+    }
+
+    override fun loadFeeds(startId: String) {
+        dataSourceManager.getFeed(startId).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ result ->
+                    result.response()?.body()?.content?.let { mainView.showFeeds(it) }
+                },{
+
+                })
+    }
+}
