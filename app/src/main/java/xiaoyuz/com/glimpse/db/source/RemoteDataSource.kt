@@ -4,5 +4,5 @@ import xiaoyuz.com.glimpse.net.RetrofitManager
 
 object RemoteDataSource : DataSource {
 
-    override fun getFeed(startId: String) = RetrofitManager.service.getFeed()
+    override fun getFeed(startId: String) = RetrofitManager.service.getFeed(startId)
 }

@@ -8,7 +8,7 @@ interface MainContract {
 
     interface View : BaseView<Presenter> {
 
-        fun showFeeds(feeds: List<FeedResponse>)
+        fun showFeeds(feedsResultPair: Pair<List<FeedResponse>, String>)
     }
 
     interface Presenter : BasePresenter {

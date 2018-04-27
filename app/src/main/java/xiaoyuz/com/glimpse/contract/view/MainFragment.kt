@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,13 +19,27 @@ class MainFragment : Fragment(), MainContract.View {
     override lateinit var presenter: MainContract.Presenter
     private val mFeeds: MutableList<FeedResponse> = mutableListOf()
 
+    private var mCurrentStartId: String = ""
+    private var mIsLoading: Boolean = false
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         list.layoutManager = LinearLayoutManager(context)
         list.adapter = FeedAdapter(mFeeds)
         list.adapter.notifyDataSetChanged()
         list.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
-        presenter.start()
+        list.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val lastVisibleItemPosition
+                        = (list.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
+                if (!mIsLoading && lastVisibleItemPosition == list.adapter.itemCount - 1) {
+                    mIsLoading = true
+                    presenter.loadFeeds(mCurrentStartId)
+                }
+            }
+        })
+        presenter.loadFeeds(mCurrentStartId)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -32,8 +47,10 @@ class MainFragment : Fragment(), MainContract.View {
         return inflater.inflate(R.layout.fragment_main, container, false)
     }
 
-    override fun showFeeds(feeds: List<FeedResponse>) {
-        mFeeds.addAll(feeds)
+    override fun showFeeds(feedsResultPair: Pair<List<FeedResponse>, String>) {
+        mFeeds.addAll(feedsResultPair.first)
+        mCurrentStartId = feedsResultPair.second
         list.adapter.notifyDataSetChanged()
+        mIsLoading = false
     }
 }

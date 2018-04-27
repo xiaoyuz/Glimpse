@@ -13,14 +13,19 @@ class MainPresenter(val dataSourceManager: DataSourceManager,
     }
 
     override fun start() {
-        loadFeeds("")
     }
 
     override fun loadFeeds(startId: String) {
         dataSourceManager.getFeed(startId).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ result ->
-                    result.response()?.body()?.content?.let { mainView.showFeeds(it) }
+                    val response = result.response()?.body()
+                    response?.let {
+                        val startId = it.pageInfo.nextId
+                        val hasMore = it.pageInfo.hasMore
+                        val content = it.content
+                        content?.let { mainView.showFeeds(it to startId) }
+                    }
                 },{
 
                 })
