@@ -21,9 +21,22 @@ class FeedAdapter(private val mfeeds: List<FeedResponse>) : RecyclerView.Adapter
             .inflate(R.layout.item_feed, parent, false))
 
     override fun onBindViewHolder(holder: FeedViewHolder, position: Int) {
-        holder.itemView.title.text = mfeeds[position].title
         Glide.with(holder.itemView.context).load(mfeeds[position].thumbnails.first().url)
-                .apply(Configs.glideRequestOptions).into(holder.itemView.thumbnail)
+                .apply(Configs.glideRequestOptions)
+                .into(holder.itemView.thumbnail)
+//        val params = holder.itemView.thumbnail.layoutParams
+//        val vw = holder.itemView.thumbnail.width - holder.itemView
+//                .thumbnail.paddingLeft - holder.itemView.thumbnail.paddingRight
+//        val d = mfeeds[position].thumbnails.first().let {
+//            it.width!!.toDouble() / it.height!!
+//        }
+//        val vh = (vw.toDouble() / d).toInt()
+//        params.height = vh + holder.itemView.thumbnail.paddingTop + holder
+//                .itemView.thumbnail.paddingBottom
+//        holder.itemView.thumbnail.layoutParams = params
+//        holder.itemView.minimumHeight = params.height
+
+        holder.itemView.title.text = mfeeds[position].title
     }
 
     override fun getItemCount() = mfeeds.size

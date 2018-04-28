@@ -2,6 +2,7 @@ package xiaoyuz.com.glimpse.contract.view
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -14,7 +15,7 @@ import xiaoyuz.com.glimpse.contract.MainContract
 import xiaoyuz.com.glimpse.model.FeedResponse
 import xiaoyuz.com.glimpse.ui.FeedAdapter
 
-class MainFragment : Fragment(), MainContract.View {
+class MainFragment : Fragment(), MainContract.View, SwipeRefreshLayout.OnRefreshListener {
 
     override lateinit var presenter: MainContract.Presenter
     private val mFeeds: MutableList<FeedResponse> = mutableListOf()
@@ -24,6 +25,7 @@ class MainFragment : Fragment(), MainContract.View {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        swipe_refresh_layout.setOnRefreshListener(this)
         list.layoutManager = LinearLayoutManager(context)
         list.adapter = FeedAdapter(mFeeds)
         list.adapter.notifyDataSetChanged()
@@ -33,7 +35,8 @@ class MainFragment : Fragment(), MainContract.View {
                 super.onScrolled(recyclerView, dx, dy)
                 val lastVisibleItemPosition
                         = (list.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
-                if (!mIsLoading && lastVisibleItemPosition == list.adapter.itemCount - 1) {
+                if (!mIsLoading && !swipe_refresh_layout.isRefreshing
+                        && lastVisibleItemPosition == list.adapter.itemCount - 1) {
                     mIsLoading = true
                     presenter.loadFeeds(mCurrentStartId)
                 }
@@ -51,6 +54,15 @@ class MainFragment : Fragment(), MainContract.View {
         mFeeds.addAll(feedsResultPair.first)
         mCurrentStartId = feedsResultPair.second
         list.adapter.notifyDataSetChanged()
+        swipe_refresh_layout.isRefreshing = false
         mIsLoading = false
+    }
+
+    override fun onRefresh() {
+        swipe_refresh_layout.isRefreshing = true
+        mFeeds.clear()
+        mCurrentStartId = ""
+        mIsLoading = true
+        presenter.loadFeeds(mCurrentStartId)
     }
 }

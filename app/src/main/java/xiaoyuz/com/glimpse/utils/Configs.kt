@@ -5,7 +5,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 
 object Configs {
-    val glideRequestOptions = RequestOptions().centerCrop()
+    val glideRequestOptions = RequestOptions()
             .priority(Priority.HIGH)
-            .diskCacheStrategy(DiskCacheStrategy.NONE)
+            .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
 }

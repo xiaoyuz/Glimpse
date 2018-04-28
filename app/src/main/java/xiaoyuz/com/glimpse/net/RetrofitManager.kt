@@ -17,7 +17,7 @@ object RetrofitManager {
             }.build()
 
     private val retrofit = Retrofit.Builder().client(okHttpClient)
-            .baseUrl("http://47.52.207.104:18182/content/")
+            .baseUrl("http://47.75.66.123:18182/content/")
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
             .addCallAdapterFactory(RxJavaCallAdapterFactory.create()).build()
