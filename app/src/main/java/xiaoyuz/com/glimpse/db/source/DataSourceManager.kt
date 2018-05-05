@@ -20,4 +20,7 @@ class DataSourceManager(val localDataSource: LocalDataSource,
 
     override fun getFeed(startId: String) = Observable.concat(localDataSource.getFeed(startId),
             remoteDataSource.getFeed(startId)).first()
+
+    override fun getPost(postId: String) = Observable.concat(localDataSource.getPost(postId),
+            remoteDataSource.getPost(postId)).first()
 }

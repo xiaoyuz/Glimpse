@@ -4,6 +4,7 @@ import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 import xiaoyuz.com.glimpse.contract.MainContract
 import xiaoyuz.com.glimpse.db.source.DataSourceManager
+import xiaoyuz.com.glimpse.model.FeedResponse
 
 class MainPresenter(val dataSourceManager: DataSourceManager,
                     val mainView: MainContract.View) : MainContract.Presenter {
@@ -29,5 +30,9 @@ class MainPresenter(val dataSourceManager: DataSourceManager,
                 },{
 
                 })
+    }
+
+    override fun openDetail(item: FeedResponse) {
+        mainView.displayDetail(item)
     }
 }
