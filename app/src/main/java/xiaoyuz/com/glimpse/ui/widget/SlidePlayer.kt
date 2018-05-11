@@ -2,7 +2,6 @@ package xiaoyuz.com.glimpse.ui.widget
 
 import android.content.Context
 import android.util.AttributeSet
-import cn.jzvd.JZVideoPlayer
 import cn.jzvd.JZVideoPlayerStandard
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
