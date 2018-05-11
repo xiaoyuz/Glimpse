@@ -3,17 +3,16 @@ package xiaoyuz.com.glimpse.contract
 import xiaoyuz.com.glimpse.base.BasePresenter
 import xiaoyuz.com.glimpse.base.BaseView
 import xiaoyuz.com.glimpse.model.FeedResponse
-import xiaoyuz.com.glimpse.model.PostResponse
 
-interface DetailContract {
+interface SlideContract {
 
     interface View : BaseView<Presenter> {
 
-        fun showPostDetail(postResponse: PostResponse)
+        fun addFeeds(feedsResultPair: Pair<List<FeedResponse>, String>)
     }
 
     interface Presenter : BasePresenter {
 
-        fun loadPost(feedResponse: FeedResponse)
+        fun loadMoreFeeds(startId: String)
     }
 }

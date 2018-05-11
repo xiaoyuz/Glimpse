@@ -23,7 +23,7 @@ class FeedAdapter(private val mfeeds: List<FeedResponse>,
         }
 
         override fun onClick(v: View) {
-            mPresenter.openDetail(v.tag as FeedResponse)
+            mPresenter.openSlide(v.tag as Int)
         }
     }
 
@@ -38,20 +38,9 @@ class FeedAdapter(private val mfeeds: List<FeedResponse>,
                 .priority(Priority.HIGH)
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .into(holder.itemView.thumbnail)
-//        val params = holder.itemView.thumbnail.layoutParams
-//        val vw = holder.itemView.thumbnail.width - holder.itemView
-//                .thumbnail.paddingLeft - holder.itemView.thumbnail.paddingRight
-//        val d = mfeeds[position].thumbnails.first().let {
-//            it.width!!.toDouble() / it.height!!
-//        }
-//        val vh = (vw.toDouble() / d).toInt()
-//        params.height = vh + holder.itemView.thumbnail.paddingTop + holder
-//                .itemView.thumbnail.paddingBottom
-//        holder.itemView.thumbnail.layoutParams = params
-//        holder.itemView.minimumHeight = params.height
 
         holder.itemView.title.text = mfeeds[position].title
-        holder.itemView.tag = mfeeds[position]
+        holder.itemView.tag = position
     }
 
     override fun getItemCount() = mfeeds.size

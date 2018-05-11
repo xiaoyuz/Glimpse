@@ -14,7 +14,7 @@ import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_main.*
 import xiaoyuz.com.glimpse.R
 import xiaoyuz.com.glimpse.contract.MainContract
-import xiaoyuz.com.glimpse.contract.presenter.DetailPresenter
+import xiaoyuz.com.glimpse.contract.presenter.SlidePresenter
 import xiaoyuz.com.glimpse.db.source.Injection
 import xiaoyuz.com.glimpse.model.FeedResponse
 import xiaoyuz.com.glimpse.ui.FeedAdapter
@@ -70,13 +70,15 @@ class MainFragment : Fragment(), MainContract.View, SwipeRefreshLayout.OnRefresh
         presenter.loadFeeds(mCurrentStartId)
     }
 
-    override fun displayDetail(item: FeedResponse) {
-        DetailFragment().apply {
+    override fun displaySlide(currentPos: Int) {
+        SlideFragment().apply {
             arguments = Bundle().apply {
-                putString("feed", Gson().toJson(item))
+                putString("feeds", Gson().toJson(mFeeds))
+                putString("currentStartId", mCurrentStartId)
+                putInt("currentPos", currentPos)
             }
         }.also {
-            DetailPresenter(Injection.provideDataSource(), it)
+            SlidePresenter(Injection.provideDataSource(), it)
             (activity as AppCompatActivity).addFragment(it)
         }
     }
